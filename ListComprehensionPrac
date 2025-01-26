@@ -1,0 +1,52 @@
+import requests
+import json
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+
+# Step 1: Fetch JSON data from the API
+def fetch_json_from_api(api_url):
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise an error for HTTP issues
+        return response.json()  # Parse JSON response
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from API: {e}")
+        return None
+
+# Step 2: Upload JSON data to Azure Blob Storage
+def upload_to_azure_blob(json_data, container_name, blob_name, connection_string):
+    try:
+        # Initialize BlobServiceClient
+        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+        
+        # Create a container if it doesn't exist
+        container_client = blob_service_client.get_container_client(container_name)
+        if not container_client.exists():
+            container_client.create_container()
+
+        # Serialize JSON data to a string
+        json_string = json.dumps(json_data, indent=4)
+
+        # Upload JSON string to blob
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+        blob_client.upload_blob(json_string, overwrite=True)
+
+        print(f"Uploaded JSON data to Azure Blob Storage: {blob_name}")
+    except Exception as e:
+        print(f"Error uploading to Azure Blob Storage: {e}")
+
+# Step 3: Main function
+if __name__ == "__main__":
+    # Replace with your API URL
+    api_url = "https://api.example.com/data"
+    
+    # Replace with your Azure Blob Storage details
+    container_name = "your-container-name"
+    blob_name = "data.json"
+    connection_string = "your-azure-storage-connection-string"
+    
+    # Fetch JSON from API
+    json_data = fetch_json_from_api(api_url)
+    
+    if json_data:
+        # Upload JSON data to Azure Blob
+        upload_to_azure_blob(json_data, container_name, blob_name, connection_string)

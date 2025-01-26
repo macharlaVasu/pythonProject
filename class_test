@@ -1,0 +1,11 @@
+class Student:
+    colleage = "Loyola Clg"
+    def __init__(self):
+        self.name = "Sreenivasulu Macharla"
+        self.age  =20 
+
+stud1 = Student()
+stud2 = Student()   
+print(stud1.name,stud1.age,stud1.colleage) 
+stud2.age =10
+print(stud2.name,stud2.age,stud2.colleage) 
