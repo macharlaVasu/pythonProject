@@ -23,3 +23,8 @@ obj.hellow()
 
 obj1 = Animai('canddy')
 obj1.hellow()
+
+x =1 
+y= 2.8
+
+print(x + y )
