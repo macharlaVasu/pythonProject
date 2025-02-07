@@ -15,9 +15,9 @@ import os
 path ='/Users/sreenivasulumacharla/Documents/Test_files/'
 
 dir_list = os.listdir(path)
-print(dir_list)
+# print(dir_list)
 
 for i in dir_list:
-    print(i)
+    # print(i)
     with open(path + i,'r') as f:
-        print(f.read())
+        print(f.read())  
