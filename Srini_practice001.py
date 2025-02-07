@@ -10,14 +10,12 @@ with open('mysample.txt', 'r') as f, open('output.txt', 'w') as o:
 
 print(cnt)
 '''
-import os 
+import glob 
+import pandas as pd 
 
 path ='/Users/sreenivasulumacharla/Documents/Test_files/'
 
-dir_list = os.listdir(path)
-# print(dir_list)
+files =  glob.glob(path + '/*.csv.*')
 
-for i in dir_list:
-    # print(i)
-    with open(path + i,'r') as f:
-        print(f.read())  
+print(files)
+
