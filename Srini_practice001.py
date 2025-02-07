@@ -23,7 +23,6 @@ print(files)
 
 data_frame = pd.DataFrame()
 content = []
-
 for filename in files:
     df = pd.read_csv(filename,index_col=None)
     content.append(df)
