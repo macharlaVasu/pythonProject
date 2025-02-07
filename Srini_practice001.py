@@ -12,11 +12,24 @@ print(cnt)
 '''
 import glob 
 import pandas as pd 
+import os 
 
-path ='/Users/sreenivasulumacharla/Documents/Test_files/'
+path ='/Users/sreenivasulumacharla/Documents/Git_Python/pythonProject/'
 
-files =  glob.glob(path + '/*.csv.*')
+files =  glob.glob(path + '/*.csv')
 
 print(files)
 # changes to the env 
+
+data_frame = pd.DataFrame()
+content = []
+
+for filename in files:
+    df = pd.read_csv(filename,index_col=None)
+    content.append(df)
+
+data_frame = pd.concat(content)
+
+print(data_frame)
+
 
