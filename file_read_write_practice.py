@@ -18,9 +18,11 @@
 
 # how to remove the empty lines 
 
-with open("mysample.txt","r+") as file:
-     for lines in file:
-          if not lines.isspace():
-               file.write(lines)
+# with open("mysample.txt","r+") as file:
+#      for lines in file:
+#           if not lines.isspace():
+#                file.write(lines)
                
-
+with open ("emp_pract001.csv",'r') as f:
+    for i in f:
+        print(i)
