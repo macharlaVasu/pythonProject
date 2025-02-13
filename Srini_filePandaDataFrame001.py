@@ -14,7 +14,9 @@ import glob
 import pandas as pd 
 import os 
 
-path ='/Users/sreenivasulumacharla/Documents/Git_Python/pythonProject/'
+# path ='/Users/sreenivasulumacharla/Documents/Git_Python/pythonProject/'
+path = '/Users/sreenivasulumacharla/Documents/Test_files/'
+
 
 files =  glob.glob(path + '/*.csv')
 
@@ -23,12 +25,16 @@ print(files)
 
 data_frame = pd.DataFrame()
 content = []
+
 for filename in files:
-    df = pd.read_csv(filename,index_col=None)
-    content.append(df)
+  try :
+    df = pd.read_csv(filename,index_col=None,on_bad_lines='skip')
+    content.append(df)    
+  except Exception as e:
+    print(str(e))
 
 data_frame = pd.concat(content)
-
+print(os.getcwd())
 print(data_frame)
 
 
