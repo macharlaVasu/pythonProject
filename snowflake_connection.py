@@ -25,4 +25,4 @@ def create_snowflake_connection():
         return None
     
 
-create_snowflake_connection()    
+   
