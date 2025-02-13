@@ -8,12 +8,13 @@ def writeSFTableToCSVFile(conn ,filePath,query):
     df = pd.read_sql_query(query,conn)
     conn.close()
     df.to_csv(filePath,index=None)
+    df.to_json(file_path)
     print(f"File Saved to: {file_path}")
 
 
 conn =create_snowflake_connection()
 query = "select * from emp;"
-file_path ='/Users/sreenivasulumacharla/Documents/Test_files/snowflake_emp.csv'    
+file_path ='/Users/sreenivasulumacharla/Documents/Test_files/snowflake_emp.json'    
 
 writeSFTableToCSVFile(conn,file_path,query)
 
