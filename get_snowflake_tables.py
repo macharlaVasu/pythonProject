@@ -1,4 +1,4 @@
-# main.py
+# Read the snowflake table data and generate the csv files 
 from snowflake_connection import create_snowflake_connection
 import pandas as pd
 
