@@ -101,19 +101,21 @@ root.geometry("500x300")  # Increase the window size to 500x300 pixels
 # Make the window resizable (width, height)
 root.resizable(True, True)  # Allow both horizontal and vertical resizing
 
+# Set background color
+root.configure(bg="#f0f0f0")
 
 # Create and place widgets
-label_name = tk.Label(root, text="Name:")
-label_name.grid(row=0, column=0, padx=10, pady=10)
+label_name = tk.Label(root, text="Name:",bg="#f0f0f0", fg="#333333")
+label_name.grid(row=0, column=0, padx=10, pady=10,)
 entry_name = tk.Entry(root)
 entry_name.grid(row=0, column=1, padx=10, pady=10)
 
-label_age = tk.Label(root, text="Age:")
+label_age = tk.Label(root, text="Age:",bg="#f0f0f0", fg="#333333")
 label_age.grid(row=1, column=0, padx=10, pady=10)
 entry_age = tk.Entry(root)
 entry_age.grid(row=1, column=1, padx=10, pady=10)
 
-label_email = tk.Label(root, text="Email:")
+label_email = tk.Label(root, text="Email:",bg="#f0f0f0", fg="#333333")
 label_email.grid(row=2, column=0, padx=10, pady=10)
 entry_email = tk.Entry(root)
 entry_email.grid(row=2, column=1, padx=10, pady=10)
