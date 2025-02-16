@@ -195,7 +195,7 @@ class Hospital:
 
         # ================================Button=========================================================
 
-        btnPrescription = Button(ButtonFrame,text="Prescription",fg='green',bg='white',
+        btnPrescription = Button(ButtonFrame,text="Prescription",fg='green',bg='white',command=self.iprescription,
                                  font=("arial",12,"bold"),width=23,padx=2,pady=6)
         btnPrescription.grid(row=0,column=0)
 
@@ -207,12 +207,12 @@ class Hospital:
         btnPrescriptionDetails.grid(row=0,column=1)
 
 
-        btnUpdate= Button(ButtonFrame,text="Update",fg='green',bg='white',
+        btnUpdate= Button(ButtonFrame,text="Update",fg='green',bg='white',command=self.update_data,
                           font=("arial",12,"bold"),width=23,padx=2,pady=6)
         btnUpdate.grid(row=0,column=2)
                        
 
-        btnDelete = Button(ButtonFrame,text="Delete",fg='green',bg='white',
+        btnDelete = Button(ButtonFrame,text="Delete",fg='green',bg='white',command=self.delete_data,
                            font=("arial",12,"bold"),width=23,padx=2,pady=6)
         btnDelete.grid(row=0,column=3)
 
@@ -287,6 +287,8 @@ class Hospital:
         self.hospital_table.column("address",width=50)
 
         self.hospital_table.pack(fill=BOTH,expand=1)
+        self.hospital_table.bind("<ButtonRelease-1>",self.get_cursor)
+        self.fetch_data()
 
         # ============Functional declaration =========================
 
@@ -327,13 +329,164 @@ class Hospital:
                 ))
 
                 conn.commit()
+                self.fetch_data()
                 my_cursor.close()
                 conn.close()
 
-                messagebox.showinfo("Success", "Record has been inserted successfully")
+                messagebox.showinfo("Insert", "Record has been inserted successfully")
 
             except Exception as e:
                 messagebox.showerror("Database Error", f"Failed to insert record: {e}")
+
+    def delete_data(self):
+         try:
+              conn = create_snowflake_connection()
+              my_cursor = conn.cursor()
+              query = ''' delete from hospital_details where  REF_NO= %s '''
+
+              my_cursor.execute(query,self.ref.get())
+              messagebox.showinfo("Delete", "Record has been Deleted successfully")
+              conn.commit()
+              self.fetch_data()
+              my_cursor.close()
+              conn.close()
+         except Exception as e:
+            messagebox.showerror("Database Error", f"Failed to insert record: {e}")
+              
+
+              
+
+
+    def update_data(self):
+        try:
+                conn = create_snowflake_connection()
+                my_cursor = conn.cursor()
+
+                query = ''' update hospital_details 
+                            set NAME_OF_TABLET= %s,
+                                NUMBER_OF_TABLET= %s,
+                                DOSE= %s,
+                                LOTS= %s,
+                                DATE_OF_ISSUE= %s,
+                                DATE_OF_EXP= %s,
+                                DAILY_DOSE= %s,
+                                SIDE_EFFECT= %s,
+                                FUTURE_INFO= %s,
+                                BLOOD_PRESSURE= %s,
+                                STORAGE_AD= %s,
+                                MEDICATION= %s,
+                                PATIENT_ID= %s,
+                                NHS_NUMBER= %s,
+                                PATIENT_NAME= %s,
+                                DOB= %s,
+                                PATIENT_ADDRESS = %s  where REF_NO= %s
+                '''
+                my_cursor.execute(query,(self.NameOfTablets.get(),
+                                            self.Dose.get(),
+                                            self.NumberOfTablets.get(),
+                                            self.Lots.get(),
+                                            self.DateOfIssue.get(),
+                                            self.DateOfExp.get(),
+                                            self.dailyDose.get(),
+                                            self.sideEffect.get(),
+                                            self.FutureInfo.get(),
+                                            self.BloodPressure.get(),
+                                            self.StorageAd.get(),
+                                            self.Medication.get(),
+                                            self.PatientId.get(),
+                                            self.NhsNumber.get(),
+                                            self.PatientName.get(),
+                                            self.DOB.get(),
+                                            self.PatientAddress.get(),
+                                            self.ref.get()
+                                            ))
+                messagebox.showinfo("Update", "Record has been updated successfully")
+                conn.commit()
+                self.fetch_data()
+                my_cursor.close()
+                conn.close()
+        except Exception as e:
+            messagebox.showerror("Database Error", f"Failed to insert record: {e}")
+
+    def iprescription(self):
+         self.txtPrescription.insert(END,"Name of the Tablet : \t\t\t"+self.NameOfTablets.get()+"\n")
+         self.txtPrescription.insert(END,"Reference No : \t\t\t"+self.ref.get()+"\n")
+         self.txtPrescription.insert(END,"Dose : \t\t\t"+self.Dose.get()+"\n")
+         self.txtPrescription.insert(END,"Number of Tablets : \t\t\t"+self.NumberOfTablets.get()+"\n")
+         self.txtPrescription.insert(END,"Lots: \t\t\t"+self.Lots.get()+"\n")
+         self.txtPrescription.insert(END,"Date of Issue: \t\t\t"+self.DateOfIssue.get()+"\n")
+         self.txtPrescription.insert(END,"Date Of Expiry: \t\t\t"+self.DateOfExp.get()+"\n")
+         self.txtPrescription.insert(END,"Daily Dose: \t\t\t"+self.dailyDose.get()+"\n")
+         self.txtPrescription.insert(END,"Side Effects: \t\t\t"+self.sideEffect.get()+"\n")
+         self.txtPrescription.insert(END,"Furture Information : \t\t\t"+self.FutureInfo.get()+"\n")
+         self.txtPrescription.insert(END,"Storage Advice: \t\t\t"+self.StorageAd.get()+"\n")
+         self.txtPrescription.insert(END,"Medication: \t\t\t"+self.Medication.get()+"\n")
+         self.txtPrescription.insert(END,"Patient ID : \t\t\t"+self.PatientId.get()+"\n")
+         self.txtPrescription.insert(END,"NHS Number: \t\t\t"+self.NhsNumber.get()+"\n")
+         self.txtPrescription.insert(END,"Patient Name: \t\t\t"+self.PatientName.get()+"\n")
+         self.txtPrescription.insert(END,"Date Of Birth: \t\t\t"+self.DOB.get()+"\n")
+         self.txtPrescription.insert(END,"Patient Address \t\t\t"+self.PatientAddress.get()+"\n")
+
+
+
+
+    def fetch_data(self):
+        try:
+            conn = create_snowflake_connection()
+            my_cursor = conn.cursor()
+            query = '''select   NAME_OF_TABLET,
+                                REF_NO,
+                                NUMBER_OF_TABLET,
+                                DOSE,
+                                LOTS,
+                                DATE_OF_ISSUE,
+                                DATE_OF_EXP,
+                                DAILY_DOSE,
+                                STORAGE_AD,
+                                NHS_NUMBER,
+                                PATIENT_NAME,
+                                DOB,
+                                PATIENT_ADDRESS from hospital_details'''
+            my_cursor.execute("select * from hospital_details")
+
+            rows = my_cursor.fetchall()
+            if len(rows)!=0:
+                self.hospital_table.delete(*self.hospital_table.get_children())
+                for i in rows:
+                    self.hospital_table.insert("",END,values=i)
+
+                conn.commit()
+            conn.close()
+        except Exception as e:
+                messagebox.showerror("Database Error", f"Failed to fetch the  record: {e}")
+
+    def get_cursor(self,event=""):
+        cursor_row =self.hospital_table.focus()
+        content =self.hospital_table.item(cursor_row)
+        row =content["values"]
+        self.NameOfTablets.set(row[0])
+        self.ref.set(row[1])
+        self.Dose.set(row[2])
+        self.NumberOfTablets.set(row[3])
+        self.Lots.set(row[4])
+        self.DateOfIssue.set(row[5])
+        self.DateOfExp.set(row[6])
+        self.dailyDose.set(row[7])
+        # self.sideEffect.set(row[8])
+        # self.FutureInfo.set(row[9])
+        # self.BloodPressure.set(row[10])
+        self.StorageAd.set(row[11])
+        # self.Medication.set(row[12])
+        self.PatientId.set(row[13])
+        # self.NhsNumber.set(row[14])
+        self.PatientName.set(row[15])
+        self.DOB.set(row[16])
+        self.PatientAddress.set(row[17])
+
+
+
+        
+
 
 
 
